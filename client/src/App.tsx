@@ -3,8 +3,10 @@ const App = () => {
   return (
     <>
       <div className="min-h-screen">
-        <Navbar />
-        <Welcome />
+        <div className="gradient-bg-welcome">
+          <Navbar />
+          <Welcome />
+        </div>
         <Services />
         <Transactions />
         <Footer />
