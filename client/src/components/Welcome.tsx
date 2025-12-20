@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
+import type { FormData } from "../context/TransactionContext";
 
 import { TransactionContext } from "../context/TransactionContext";
 import { shortenAddress } from "../utils/shortenAddress";
@@ -9,8 +10,24 @@ import { Loader } from ".";
 
 const companyCommonStyles =
   "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
+type InputProps = {
+  placeholder: string;
+  name: keyof FormData;
+  type: string;
+  value?: string;
+  handleChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    name: keyof FormData
+  ) => void;
+};
 
-const Input = ({ placeholder, name, type, value, handleChange }) => (
+const Input = ({
+  placeholder,
+  name,
+  type,
+  value,
+  handleChange,
+}: InputProps) => (
   <input
     placeholder={placeholder}
     type={type}
@@ -22,6 +39,11 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 );
 
 const Welcome = () => {
+  const context = useContext(TransactionContext);
+  if (!context) {
+    throw new Error("TransactionContext.Provider missing");
+  }
+
   const {
     currentAccount,
     connectWallet,
@@ -29,9 +51,9 @@ const Welcome = () => {
     sendTransaction,
     formData,
     isLoading,
-  } = useContext(TransactionContext);
+  } = context;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { addressTo, amount, keyword, message } = formData;
 
     e.preventDefault();
@@ -102,6 +124,7 @@ const Welcome = () => {
               </div>
             </div>
           </div>
+
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
             <Input
               placeholder="Address To"
@@ -128,7 +151,7 @@ const Welcome = () => {
               handleChange={handleChange}
             />
 
-            <div className="h-[1px] w-full bg-gray-400 my-2" />
+            <div className="h-px w-full bg-gray-400 my-2" />
 
             {isLoading ? (
               <Loader />
