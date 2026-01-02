@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-a143817537f48379b79221f2df23746cbe3b60c0",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/Transactions.sol": "project/contracts/Transactions.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/Transactions.sol": {
+        "content": "// SPDX-License-Identifier: UNLICENSED\r\n\r\npragma solidity ^0.8.0;\r\n\r\ncontract Transactions {\r\n    uint256 transactionCount;\r\n\r\n    event Transfer(address from, address receiver, uint amount, string message, uint256 timestamp, string keyword);\r\n\r\n    struct TransferStruct {\r\n        address sender;\r\n        address receiver;\r\n        uint amount;\r\n        string message;\r\n        uint256 timestamp;\r\n        string keyword;\r\n    }\r\n\r\n    TransferStruct[] transactions;\r\n\r\n    function addToBlockchain(address payable receiver, uint amount, string memory message, string memory keyword) public {\r\n        transactionCount += 1;\r\n        transactions.push(TransferStruct(msg.sender, receiver, amount, message, block.timestamp, keyword));\r\n\r\n        emit Transfer(msg.sender, receiver, amount, message, block.timestamp, keyword);\r\n    }\r\n\r\n    function getAllTransactions() public view returns (TransferStruct[] memory) {\r\n        return transactions;\r\n        \r\n    }\r\n\r\n    function getTransactionCount() public view returns (uint256) {\r\n        return transactionCount;\r\n        \r\n    }\r\n}"
+      }
+    }
+  }
+}

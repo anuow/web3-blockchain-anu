@@ -1,5 +1,7 @@
+import "dotenv/config";
 import hardhatToolboxMochaEthersPlugin from "@nomicfoundation/hardhat-toolbox-mocha-ethers";
 import { configVariable, defineConfig } from "hardhat/config";
+
 
 export default defineConfig({
   plugins: [hardhatToolboxMochaEthersPlugin],
@@ -36,3 +38,5 @@ export default defineConfig({
     },
   },
 });
+
+// https://eth-sepolia.g.alchemy.com/v2/zefTjr42MSVvke85v7yfy
