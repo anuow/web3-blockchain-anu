@@ -18,12 +18,40 @@ contract Transactions {
 
     TransferStruct[] transactions;
 
-    function addToBlockchain(address payable receiver, uint amount, string memory message, string memory keyword) public {
-        transactionCount += 1;
-        transactions.push(TransferStruct(msg.sender, receiver, amount, message, block.timestamp, keyword));
+    function addToBlockchain(
+    address payable receiver,
+    uint amount,
+    string memory message,
+    string memory keyword
+) public payable {
+    require(msg.value == amount, "Amount mismatch");
 
-        emit Transfer(msg.sender, receiver, amount, message, block.timestamp, keyword);
-    }
+    transactionCount += 1;
+
+    transactions.push(
+        TransferStruct(
+            msg.sender,
+            receiver,
+            amount,
+            message,
+            block.timestamp,
+            keyword
+        )
+    );
+
+    (bool success, ) = receiver.call{value: msg.value}("");
+    require(success, "ETH transfer failed");
+
+    emit Transfer(
+        msg.sender,
+        receiver,
+        amount,
+        message,
+        block.timestamp,
+        keyword
+    );
+}
+
 
     function getAllTransactions() public view returns (TransferStruct[] memory) {
         return transactions;
