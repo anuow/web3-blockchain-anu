@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-8d8d1088b87d3ec9bc55d4c4d55c537122670e4e",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/Transactions.sol": "project/contracts/Transactions.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/Transactions.sol": {
+        "content": "// SPDX-License-Identifier: UNLICENSED\r\n\r\npragma solidity ^0.8.0;\r\n\r\ncontract Transactions {\r\n    uint256 transactionCount;\r\n\r\n    event Transfer(address from, address receiver, uint amount, string message, uint256 timestamp, string keyword);\r\n\r\n    struct TransferStruct {\r\n        address sender;\r\n        address receiver;\r\n        uint amount;\r\n        string message;\r\n        uint256 timestamp;\r\n        string keyword;\r\n    }\r\n\r\n    TransferStruct[] transactions;\r\n\r\n    function addToBlockchain(\r\n    address payable receiver,\r\n    uint amount,\r\n    string memory message,\r\n    string memory keyword\r\n) public payable {\r\n    require(msg.value == amount, \"Amount mismatch\");\r\n\r\n    transactionCount += 1;\r\n\r\n    transactions.push(\r\n        TransferStruct(\r\n            msg.sender,\r\n            receiver,\r\n            amount,\r\n            message,\r\n            block.timestamp,\r\n            keyword\r\n        )\r\n    );\r\n\r\n    (bool success, ) = receiver.call{value: msg.value}(\"\");\r\n    require(success, \"ETH transfer failed\");\r\n\r\n    emit Transfer(\r\n        msg.sender,\r\n        receiver,\r\n        amount,\r\n        message,\r\n        block.timestamp,\r\n        keyword\r\n    );\r\n}\r\n\r\n\r\n    function getAllTransactions() public view returns (TransferStruct[] memory) {\r\n        return transactions;\r\n        \r\n    }\r\n\r\n    function getTransactionCount() public view returns (uint256) {\r\n        return transactionCount;\r\n        \r\n    }\r\n}"
+      }
+    }
+  }
+}
